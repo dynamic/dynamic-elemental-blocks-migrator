@@ -1,0 +1,4 @@
+<?php
+
+define('DYNAMIC_ELEMENTAL-BLOCKS-MIGRATOR_PATH', __DIR__);
+define('DYNAMIC_ELEMENTAL-BLOCKS-MIGRATOR_DIR', basename(__DIR__));

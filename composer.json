@@ -1,0 +1,29 @@
+{
+    "name": "dynamic/dynamic-elemental-blocks-migrator",
+    "description": "A task to migrate Dynamic Elemental blocks after namespacing updates.",
+    "authors": [
+        {
+            "name": "Dynamic",
+            "email": "dev@dynamicagency.com",
+            "homepage": "http://www.dynamicagency.com"
+        }
+    ],
+    "keywords": [
+        "silverstripe", "elemental", "blocks", "migrate"
+    ],
+    "type": "silverstripe-vendormodule",
+    "license": "BSD-3-Clause",
+    "require": {
+        "dnadesign/silverstripe-elemental": "^2@dev",
+        "silverstripe/vendor-plugin": "^1.0@dev"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "^5.7",
+        "squizlabs/php_codesniffer": "*"
+    },
+    "config": {
+        "process-timeout": 600
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
