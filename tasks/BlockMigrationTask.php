@@ -4,10 +4,8 @@ namespace Dynamic\Elements\Migrator;
 
 use DNADesign\Elemental\Models\BaseElement;
 use Dynamic\BaseObject\Model\BaseElementObject;
-use Dynamic\Elements\Accordion\Elements\ElementAccordion;
 use SilverStripe\Control\Director;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Subsites\Model\Subsite;
 
 class BlockMigrationTask extends BuildTask
@@ -77,52 +75,50 @@ class BlockMigrationTask extends BuildTask
     ];
 
     /**
-     * mark all ProductDetail records as ShowInMenus = 0.
+     *
      */
     public function updateNames()
     {
-        $ct = 0;
-        $blocks = BaseElement::get();
-        foreach ($this->mapping as $key => $value) {
-            $records = $blocks->filter("ClassName", $key);
-            //Debug::show($records->count());
-            foreach ($records as $record) {
-                $record->ClassName = $value;
-                $record->writeToStage('Stage');
-                if ($record->isPublished()) {
-                    $record->publish('Stage', 'Live');
-                }
-                //Debug::show($record->ClassName);
-                static::write_message($record->Title . " updated");
-                $ct++;
-            }
-        }
-
+        $ct = $this->update(BaseElement::class, $this->mapping, 'Title');
         static::write_message("<h4>{$ct} blocks updated.</h4>");
     }
 
     /**
-     * mark all ProductDetail records as ShowInMenus = 0.
+     *
      */
     public function updateObjectNames()
     {
+        $ct = $this->update(BaseElementObject::class, $this->objectMapping, 'Name');
+        static::write_message("<h4>{$ct} block objects updated.</h4>");
+    }
+
+    /**
+     * @param string $class
+     * @param array $mapping
+     * @param string $output
+     *
+     * @param int The number updated
+     */
+    private function update($class, array $mapping, $output)
+    {
         $ct = 0;
-        $blocks = BaseElementObject::get();
-        foreach ($this->objectMapping as $key => $value) {
-            $records = $blocks->filter("ClassName", $key);
-            //Debug::show($records->count());
+        $objects = $class::get();
+
+        foreach ($mapping as $key => $value) {
+            $records = $objects->filter("ClassName", $key);
+
             foreach ($records as $record) {
                 $record->ClassName = $value;
                 $record->writeToStage('Stage');
                 if ($record->isPublished()) {
                     $record->publish('Stage', 'Live');
                 }
-                static::write_message($record->Name . " updated");
+                static::write_message($record->{$output} . " updated");
                 $ct++;
             }
         }
 
-        static::write_message("<h4>{$ct} block objects updated.</h4>");
+        return $ct;
     }
 
     /**
